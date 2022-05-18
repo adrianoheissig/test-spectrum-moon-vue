@@ -16,13 +16,9 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
+            <button type="button" class="btn btn-link" @click.stop="onMain">
+              Home
+            </button>
           </li>
         </ul>
         <div class="col-md-3 text-end" v-if="!loggedIn">
@@ -33,9 +29,18 @@
           >
             Login
           </button>
-          <button type="button" class="btn btn-primary">Sign-up</button>
+          <button type="button" class="btn btn-primary" @click.stop="onSignUp">
+            Sign-up
+          </button>
         </div>
-        <div class="text-end" v-else>
+        <div class="col-md-3 text-end" v-else>
+          <button
+            type="button"
+            class="btn btn-success me-2"
+            @click.stop="onProfile"
+          >
+            Profile
+          </button>
           <button type="button" class="btn btn-danger" @click.stop="onLogout">
             Logout
           </button>
@@ -65,12 +70,21 @@ export default {
 
   methods: {
     ...mapActions(["logoutUser"]),
+    onMain() {
+      this.$router.push("main");
+    },
     onLogin() {
       this.$router.push("login");
     },
-    onSignUp() {},
+    onSignUp() {
+      this.$router.push("register");
+    },
     onLogout() {
       this.logoutUser();
+      this.$router.push("main");
+    },
+    onProfile() {
+      this.$router.push("profile");
     },
   },
 };

@@ -7,11 +7,11 @@ export const getUserInformation = async (req, res) => {
     const userId = req.params.id;
     if (!userId) res.status(400).json({ msg: "Id not found!" });
 
-    const users = await Users.findAll(
-      { attributes: ["id", "name", "email"] },
+    const user = await Users.findAll(
+      { attributes: ["id", "name", "email", "createdAt"] },
       { where: { id: userId } }
     );
-    res.json(users);
+    res.json(user);
   } catch (error) {
     res.status(400).json({ msg: error });
   }
@@ -25,6 +25,11 @@ export const Register = async (req, res) => {
       .json({ msg: "Password and Confirm Password do not match!" });
   const salt = await bcrypt.genSalt();
   const hashPassword = await bcrypt.hash(password, salt);
+  const user = await Users.findAll({ where: { email } });
+
+  if (user.length > 0) {
+    return res.status(400).json({ msg: "User already exists!" });
+  }
   try {
     await Users.create({
       name: name,

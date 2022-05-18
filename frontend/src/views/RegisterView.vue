@@ -10,18 +10,23 @@
           height="57"
         />
       </div>
-      <h1 class="h3 mb-3 fw-normal text-center">Signup</h1>
-      <h1 class="alert alert-danger h6 mb-2 fw-bold" v-if="msg">{{ msg }}</h1>
+      <h1 class="h3 mb-3 fw-normal text-center">Register</h1>
+      <h1 class="alert alert-danger h6 mb-2 fw-bold" v-if="msgError">
+        {{ msgError }}
+      </h1>
+      <h1 class="alert alert-success h6 mb-2 fw-bold" v-if="msgSuccess">
+        {{ msgSuccess }}
+      </h1>
       <div class="form-floating">
         <input
-          type="email"
+          type="text"
           class="form-control"
           id="floatingInput"
-          placeholder="name@example.com"
-          v-model="email"
+          placeholder="Name Lastname"
+          v-model="name"
           autocomplete="true"
         />
-        <label for="floatingInput">Email address</label>
+        <label for="floatingInput">Name</label>
       </div>
       <div class="form-floating">
         <input
@@ -45,14 +50,25 @@
         />
         <label for="floatingPassword">Password</label>
       </div>
+      <div class="form-floating">
+        <input
+          type="password"
+          class="form-control"
+          id="floatingPassword"
+          placeholder="Password"
+          v-model="confirmPassword"
+          autocomplete="true"
+        />
+        <label for="floatingPassword">Confirm Password</label>
+      </div>
 
       <button
         class="w-100 btn btn-lg btn-primary"
         type="button"
-        @click.stop="onSignIn"
+        @click.stop="onRegister"
         :disabled="disableButton"
       >
-        Sign in
+        Register
       </button>
     </form>
   </main>
@@ -60,37 +76,44 @@
 
 <script>
 import api from "../api";
-import { mapActions } from "vuex";
 export default {
   name: "RegisterView",
   data() {
     return {
+      name: null,
       email: null,
       password: null,
-      msg: null,
+      confirmPassword: null,
+      msgError: null,
+      msgSuccess: null,
       disableButton: false,
     };
   },
   methods: {
-    ...mapActions(["loginUser"]),
-    onSignIn() {
+    onRegister() {
       this.disableButton = true;
       const data = {
+        name: this.name,
         email: this.email,
         password: this.password,
+        confirmPassword: this.confirmPassword,
       };
       api
-        .post("/login", data)
+        .post("/register", data)
         .then(
           (res) => {
-            this.loginUser(res.data);
-            this.$router.push("main");
+            this.msgError = null;
+            this.msgSuccess = res.data.msg;
+            setTimeout(() => {
+              this.$router.push("main");
+            }, 1500);
           },
           (err) => {
+            this.msgSuccess = null;
             if (err.response.data.msg) {
-              this.msg = err.response.data.msg;
+              this.msgError = err.response.data.msg;
             } else {
-              this.msg = err.message;
+              this.msgError = err.message;
             }
           }
         )

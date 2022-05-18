@@ -14,7 +14,8 @@
       <h1 class="alert alert-danger h6 mb-2 fw-bold" v-if="msg">{{ msg }}</h1>
       <div class="form-floating">
         <input
-          type="email"
+          ty
+          pe="email"
           class="form-control"
           id="floatingInput"
           placeholder="name@example.com"

@@ -1,16 +1,9 @@
 import { createStore } from "vuex";
-import createPersistedState from "vuex-persistedstate";
 
 import api from "../api";
 import jwt_decode from "jwt-decode";
 
 export default createStore({
-  plugins: [
-    createPersistedState({
-      storage: window.localStorage,
-    }),
-  ],
-
   state: {
     user: null,
   },
@@ -31,9 +24,11 @@ export default createStore({
       const decoded = jwt_decode(token);
       api.defaults.headers.common.Authorization = `bearer ${token}`;
       state.user = decoded;
+      localStorage.setItem("userKey", JSON.stringify(decoded));
     },
     onLogoutUser(state) {
       state.user = null;
+      localStorage.removeItem("userKey");
       delete api.defaults.headers.common.Authorization;
     },
   },
