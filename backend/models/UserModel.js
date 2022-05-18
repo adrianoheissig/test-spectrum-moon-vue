@@ -9,7 +9,6 @@ const Users = db.define(
     name: { type: DataTypes.STRING },
     email: { type: DataTypes.STRING },
     password: { type: DataTypes.STRING },
-    access_token: { type: DataTypes.TEXT },
   },
   { freezeTableName: true }
 );

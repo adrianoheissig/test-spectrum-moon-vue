@@ -55,27 +55,9 @@ export const Login = async (req, res) => {
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "1d",
     });
-    
-    console.log(payload)
-    await Users.update(
-      { access_token: accessToken },
-      { where: { id: userId } }
-    );
+
     res.json({ accessToken });
   } catch (error) {
     res.status(404).json({ msg: "Email/Password not found!" });
   }
-};
-
-export const Logout = async (req, res) => {
-  const { userId } = req.body;
-  if (!userId) return res.sendStatus(204);
-  const user = await Users.findAll({
-    where: {
-      id: userId,
-    },
-  });
-  if (!user[0]) return res.sendStatus(204);
-  await Users.update({ refresh_token: null }, { where: { id: userId } });
-  return res.sendStatus(200);
 };

@@ -1,17 +1,11 @@
 import express from "express";
-import {
-  getUserInformation,
-  Register,
-  Login,
-  Logout,
-} from "../controllers/Users.js";
+import { getUserInformation, Register, Login } from "../controllers/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 
 const router = express.Router();
 
-router.get("/user/:id", verifyToken, getUserInformation);
-router.post("/users", Register);
-router.post("/login", Login);
-router.post("/logout", Logout);
+router.get("/api/user/:id", verifyToken, getUserInformation);
+router.post("/api/users", Register);
+router.post("/api/login", Login);
 
 export default router;
